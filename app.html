@@ -1,0 +1,373 @@
+<!DOCTYPE HTML>
+<!--
+	Projection by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+
+<head>
+	<title>AntiCovidAI - App</title>
+
+	<!-- Metatags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="Crowdsourced AI-based COVID-19 Detection">
+	<meta name="author" content="Team AntiCovidAI">
+
+	<link rel="stylesheet" href="assets/css/main.css" />
+		<script src="https://kit.fontawesome.com/828decba15.js" crossorigin="anonymous"></script>
+
+	<!--Sweet Alert-->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css" rel="stylesheet" />
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-165690517-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-165690517-1');
+
+	</script>
+
+</head>
+
+<body>
+
+	<!-- Header -->
+	<header id="header">
+		<div class="inner">
+			<nav id="nav">
+				<a href="index.html">Home</a>
+				<a href="app.html">App</a>
+				</a>
+			</nav>
+			<a href="#navPanel" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+		</div>
+	</header>
+
+	<!-- Banner - Message and icon -->
+	<section id="banner">
+		<div class="inner">
+			<header>
+				<h1>AntiCovidAI COVID-19</h1>
+				<p>Please take a few minutes to send us your cough sounds to help verify COVID-19!</p>
+			</header>
+		</div>
+	</section>
+
+
+	<!-- Main -->
+	<section id="main" class="wrapper">
+		<div class="inner">
+			<p>Note: This app is in beta. All information and recordings acquired are entirely confidential.</p>
+			<p id="cough-statement">Translate this page:</p>
+						<div id="google_translate_element"></div>
+						<script type="text/javascript">
+						function googleTranslateElementInit() {
+							new google.translate.TranslateElement({pageLanguage: 'en',
+							includedLanguages: 'af,en,fr,hi,ja,ne,ur,'},
+							'google_translate_element');
+						}
+						</script>
+						<script type="text/javascript"
+						src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+						</script>
+			<form method="POST" enctype="multipart/form-data" id="myForm">
+				<!-- Break -->
+				<br>
+				<div class="is-required">
+					<p>Required question <span class="is-required">*</span></p>
+				</div>
+
+				<!--Consent Question -->
+				<div class="form-group">
+						<label for="consent">Do you consent to participating in this research (<a href="consent_form.pdf" target=_blank>link</a>)?<span class="is-required">*</span></label>
+						<!-- Add consent form here -->
+				</div>
+				<div class="form-check form-check-inline" style="margin-left: 5px">
+            <input class="form-check-input"type="radio" name="consent" id="consent_yes" value="yes">
+            <label class="form-check-label" for="consent_yes" style="margin-left: 3px">Yes</label>
+        </div>
+
+				<div class="form-check form-check-inline" style="margin-left: 5px">
+            <input class="form-check-input" type="radio" name="consent" id="consent_no" value="no">
+            <label class="form-check-label" for="consent_no" style="margin-left: 3px">No</label>
+        </div>
+
+				<br/>
+				<!-- Covid Condition -->
+				<div class="form-group">
+						<label for="condition">Please enter your COVID19 test result here</label>
+									<div class="form-check form-check-inline" style="margin-left: 5px">
+												<input class="form-check-input" type="radio" name="condition" id="condition_positive" value="positive">
+												<label class="form-check-label" for="condition_positive" style="margin-left: 3px">Positive</label>
+									</div>
+									<div class="form-check form-check-inline" style="margin-left: 5px">
+												<input class="form-check-input" type="radio" name="condition" id="condition_negative" value="negative">
+												<label class="form-check-label" for="condition_negative" style="margin-left: 3px">Negative</label>
+									</div>
+									<div class="form-check form-check-inline" style="margin-left: 5px">
+												<input class="form-check-input" type="radio" name="condition" id="condition_pending" value="pending">
+												<label class="form-check-label" for="condition_pending" style="margin-left: 3px">Result pending</label>
+									</div>
+									<div class="form-check form-check-inline" style="margin-left: 5px">
+												<input class="form-check-input" type="radio" name="condition" id="condition_untested" value="pending">
+												<label class="form-check-label" for="condition_untested" style="margin-left: 3px">Not tested</label>
+									</div>
+				</div>
+				<br/>
+
+				<div class="row uniform">
+					<div id="cough">
+						<p id="cough-statement">Please record cough for 15 seconds</p>
+						<button id="recordButton">Record</button>
+						<button id="pauseButton" disabled>Pause</button>
+						<button id="stopButton" disabled>Stop</button>
+						<i class="fa fa-question-circle fa-3x" onclick="show_instructions()"></i>
+					</div>
+				</div>
+				<div id="formats">Format: start recording to see sample rate</div>
+				<p><strong>Recordings:</strong></p>
+				<ol id="recordingsList"></ol>
+
+				<!-- Age Question -->
+				<div class="row uniform">
+					<div class="6u 12u$(xsmall)">
+						<label for="age">Please enter your age: </label>
+						<input type="number" class="form-control" id="age" name="age" aria-describedby="age" placeholder="Enter age">
+					</div>
+				</div>
+				<br/>
+				<!-- Gender -->
+				<div class="form-group">
+            <label for="gender">Gender<span class="is-required">*</span></label>
+                  <div class="form-check form-check-inline" style="margin-left: 5px">
+                        <input class="form-check-input" type="radio" name="gender" id="gender_female" value="female">
+                        <label class="form-check-label" for="gender_female" style="margin-left: 3px">Female</label>
+                  </div>
+            			<div class="form-check form-check-inline" style="margin-left: 5px">
+                    	<input class="form-check-input" type="radio" name="gender" id="gender_male" value="male">
+                        <label class="form-check-label" for="gender_male" style="margin-left: 3px">Male</label>
+									</div>
+        </div>
+				<br/>
+
+				<!-- Smoker/Nonsmoker -->
+				<div class="12u 12u$(small)">
+						<label></span>Have you smoked regularly within the last ten years?<span class="is-required">*</span></label>
+				</div>
+
+				<div class="12u 12u$(small)" style="margin-left: 5px">
+						<input type="radio" id="Y" name="smoker" value="Yes">
+						<label for="Y">Yes</label>
+				</div>
+
+				<div class="12u 12u$(small)" style="margin-left: 5px">
+						<input type="radio" id="N" name="smoker" value="No">
+						<label for="N">No</label>
+				</div>
+
+				<br/>
+				<!-- Break -->
+				<div class="row uniform">
+					<div class="6u 12u$(small)">
+						<label></span>Your Symptoms<br><br>
+
+							<input type="checkbox" id="roundtrip1" name="reported_symptoms1" value="Fever, chills, or sweating">
+							<label for="roundtrip1">Fever, chills, or sweating</label>
+							<br>
+
+							<input type="checkbox" id="roundtrip2" name="reported_symptoms2" value="Shortness of breath">
+							<label for="roundtrip2">Shortness of breath</label>
+
+							<br>
+							<input type="checkbox" id="roundtrip3" name="reported_symptoms3" value="New or worsening cough">
+							<label for="roundtrip3"> New or worsening cough</label>
+							<br>
+
+							<input type="checkbox" id="roundtrip4" name="reported_symptoms4" value="Sore throat">
+							<label for="roundtrip4">Sore throat</label>
+							<br>
+
+							<input type="checkbox" id="roundtrip5" name="reported_symptoms5" value="Body aches">
+							<label for="roundtrip5">Body aches</label>
+
+							<br>
+
+							<input type="checkbox" id="roundtrip7" name="reported_symptoms7" value="Loss of taste">
+							<label for="roundtrip7">Loss of taste</label>
+							<br>
+
+							<input type="checkbox" id="roundtrip8" name="reported_symptoms8" value="Loss of smell">
+							<label for="roundtrip8">Loss of smell</label>
+							<br>
+
+							<input type="checkbox" id="roundtrip9" name="reported_symptoms9" value="Vomiting or diarrhea">
+							<label for="roundtrip9">Vomiting or Diarrhea</label>
+							<br>
+
+							<input type="checkbox" id="roundtrip10" name="reported_symptoms10" value="Tightness in chest">
+							<label for="roundtrip10">Tightness in chest</label>
+							<br>
+
+							<input type="checkbox" id="roundtrip11" name="reported_symptoms11" value="Headaches">
+							<label for="roundtrip11">Headaches</label>
+							<br>
+
+							<input type="checkbox" id="roundtrip12" name="reported_symptoms12" value="None">
+							<label for="roundtrip12">None</label>
+
+					</div>
+				</div>
+				<!-- Break -->
+				<!-- Break -->
+				<div class="row uniform"><br>
+					<!-- Break -->
+
+					<div class="12u$">
+						<ul class="actions">
+							<li><input type="button" value="Submit" id="submit" onclick="submit_data()" /></li>
+							<li><input type="reset" value="Reset" /></li>
+						</ul>
+					</div>
+					<!--
+					<div class="is-required">
+						<p><button id="resetbtn">new user</button>
+					</div>
+				-->
+				</div>
+			</form>
+			<hr />
+		</div>
+
+	</section>
+
+	<!-- Footer -->
+	<footer id="footer">
+		<div class="inner">
+			<div class="footer-icons" id="contact">
+				<a class="hidden-mail" data-username="amilkh" data-inline="false">
+					<i class="fas fa-envelope fa-2x"></i>
+				</a>
+			</div>
+			<div class="copyright">
+				&copy; Copyright 2020 AntiCovidAI. All rights reserved.
+				<br>Built with <a href="https://templated.co/projection">Projection from Templated.</a>
+			</div>
+		</div>
+	</footer>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/skel.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.js"></script>
+	<script>
+
+const sleep = async (msec) => new Promise((resolve) => setTimeout(resolve, msec));
+
+function resetUserID () {
+	localStorage.removeItem("AntiCovidAI-userid");
+	//alert("reset userid");
+	localStorage.removeItem("AntiCovidAI-age");
+};
+function initFormData () {
+	if (localStorage.getItem("AntiCovidAI-age")) {
+		age.value = localStorage.getItem("AntiCovidAI-age");
+	}
+};
+
+//resetbtn.onclick = () => resetUserID();
+window.onload = () => {
+	initFormData();
+};
+
+async function uploadAudio () {
+  for (;;) {
+    try {
+			 const url = "http://localhost:8899/";
+			const formdata = new FormData(myForm)
+			if (blob_arr.length > 0) {
+				formdata.append("cough_audio", blob_arr[0], "cough.wav");
+			}
+
+			if (age.value != localStorage.getItem("AntiCovidAI-age")) {
+				 resetUserID();
+			}
+			let userid = localStorage.getItem("AntiCovidAI-userid");
+			if (!userid) {
+				userid = Math.random().toString() + "-" + new Date().getTime();
+				formdata.append("userid", userid);
+				localStorage.setItem("AntiCovidAI-userid", userid);
+			} else {
+				formdata.append("userid", userid);
+			}
+
+			// save the value of Age
+			if (!localStorage.getItem("AntiCovidAI-age")){
+				localStorage.setItem("AntiCovidAI-age", age.value);
+			}
+
+      const res = await (await fetch(url, { method: 'POST', body: formdata })).json()
+      console.log(res)
+      if (res.res == 'ok') {
+        return res.id
+      }
+			alert("upload error, retry? (" + res.res + ") tap to retry");
+    } catch (e) {
+			alert("upload error, retry? (" + e + ") tap to retry");
+			break;
+    }
+		await sleep(500);
+  }
+}
+
+		async function submit_data() {
+			await uploadAudio();
+			const msg = "Thank you for donating your cough!"
+			swal({
+				title: "Thank You!",
+				text: msg,
+				html: true,
+				confirmButtonClass: "button",
+				confirmButtonText: "Go to feedback form",
+			},
+			function() {
+				window.location.href="https://forms.gle/zzb9doND2SVQQv11A";
+			});
+		}
+
+		function show_instructions() {
+			swal({
+				title: "Instructions - Record Cough",
+				text: "Avoid contaminating your phone!",
+				html: true,
+				confirmButtonClass: "button",
+				confirmButtonText: "Let's do this!",
+			});
+		}
+
+		function show_instructions_video() {
+			swal({
+				title: "Instructions - Video Record",
+				text: "<p>(1) wipe the fingertip with alcohol<br> (2) press the fingertip lightly onto the smartphone camera such that the entire lens is covered, as show below </p><br><img src='images/videoInstructions.png' alt='video instructions' class='modal-instructions'/>",
+				html: true,
+				button: "Ok"
+			});
+		}
+
+	</script>
+
+	<!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
+	<script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+	<script src="assets/js/app.js"></script>
+</body>
+
+</html>
